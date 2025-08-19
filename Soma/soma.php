@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soma</title>
+</head>
+<body>
+    
+
+
+<form action="soma.php" method="GET" name="Soma">
+    <h2>Faça novamente!</h2>
+    <label for="Fnum">Informe o primeiro numero:</label>
+    <br>
+    <input type="text" id="Fnum" name="num1">
+    <br>
+    <label for="Snum">Informe o segundo numero:</label>
+    <br>
+    <input type="text" id="Snum" name="num2">
+    <br>
+    <input type="submit" value="Enviar">
+</form>
+
+<main>
+    <?php 
+    $v1 = $_GET["num1"];
+    $v2 = $_GET["num2"];
+    $resultado = $v1 + $v2;
+
+    echo "<h1> resultado: $resultado </h1>";
+    
+    
+    
+    ?>
+</main>
+
+
+</body>
+</html>
