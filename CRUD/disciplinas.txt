@@ -1,0 +1,2 @@
+Fundamentos de Algoritmos da Computação;1FAC;120H
+Interação Homem-Máquina;1IHM;60H
