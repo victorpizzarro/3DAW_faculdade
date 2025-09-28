@@ -15,6 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button type="submit">Buscar</button>
 </form>
 
+<a href="menu.php">
+  <button>Voltar ao Menu</button>
+</a>
+
 <hr>
 
 <?php
@@ -30,7 +34,7 @@ if (file_exists($mc_file)) {
     $mc_questions = file($mc_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     foreach ($mc_questions as $line) {
-        $data = explode('|', $line, 4); 
+        $data = explode(';', $line, 4); 
         if (count($data) !== 4) continue;
 
         list($id, $question, $choices_str, $correct_index) = $data;
@@ -62,7 +66,7 @@ if (!$found && file_exists($text_file)) {
     $text_questions = file($text_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     foreach ($text_questions as $line) {
-        $data = explode('|', $line, 3); 
+        $data = explode(';', $line, 3); 
         if (count($data) !== 3) continue;
 
         list($id, $question, $correct_answer) = $data;
@@ -82,3 +86,4 @@ if (!$found) {
     echo "<p>Pergunta com ID $question_id não encontrada.</p>";
 }
 ?>
+

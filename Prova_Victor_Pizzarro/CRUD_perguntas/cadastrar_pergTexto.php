@@ -7,34 +7,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     if (!empty($text_question) && !empty($correct_answer)) {
 
-        
-        if (strpos($text_question, '|') !== false || strpos($correct_answer, '|') !== false) {
-            echo "A pergunta e a resposta não podem conter o caractere '|'.";
+
+        if (strpos($text_question, ';') !== false || strpos($correct_answer, '|') !== false) {
+            echo "A pergunta e a resposta não podem conter o caractere ';'.";
             exit;
         }
 
-       
-        $lines = file_exists($file_path) ? file($file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
-        $last_id = 0;
 
-        if (!empty($lines)) {
-            $last_line = end($lines);
-            $parts = explode('|', $last_line);
-            if (is_numeric($parts[0])) {
-                $last_id = (int)$parts[0];
-            }
-        }
+        require 'funções.php';
+        $new_id = getNextId();
 
-        $new_id = $last_id + 1;
-        $data = $new_id . '|' . $text_question . '|' . $correct_answer . "\n";
+        $data = $new_id . ';' . $text_question . ';' . $correct_answer . "\n";
 
-        
+
         if (file_put_contents($file_path, $data, FILE_APPEND) !== false) {
-            echo " Pergunta de texto criada com sucesso!";
+            echo "Pergunta de múltipla escolha criada com sucesso! ID: $new_id";
         } else {
             echo " Erro ao salvar a pergunta. Verifique permissões no arquivo.";
         }
-
     } else {
         echo " Por favor, preencha a pergunta e a resposta correta.";
     }
@@ -53,4 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <input type="text" name="correct_answer" required><br><br>
 
     <button type="submit">Criar Pergunta</button>
+
+
 </form>
+
+<a href="menu.php">
+    <button>Voltar ao Menu</button>
+</a>

@@ -12,13 +12,13 @@ $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = trim($_POST['delete_id']);
 
-   
+
     $mc_questions = file($file_path_mc, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     $updated_mc = [];
     $found_mc = false;
 
     foreach ($mc_questions as $line) {
-        $data = explode('|', $line, 4);
+        $data = explode(';', $line, 4);
         if (count($data) !== 4) {
             $updated_mc[] = $line;
             continue;
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         list($id) = $data;
         if ($id === $delete_id) {
             $found_mc = true;
-            continue; 
+            continue;
         }
         $updated_mc[] = $line;
     }
@@ -36,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         $message .= "Pergunta de múltipla escolha ID $delete_id excluída.<br>";
     }
 
-    
+
     $text_questions = file($file_path_text, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     $updated_text = [];
     $found_text = false;
 
     foreach ($text_questions as $line) {
-        $data = explode('|', $line, 3);
+        $data = explode(';', $line, 3);
         if (count($data) !== 3) {
             $updated_text[] = $line;
             continue;
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         list($id) = $data;
         if ($id === $delete_id) {
             $found_text = true;
-            continue; 
+            continue;
         }
         $updated_text[] = $line;
     }
@@ -73,4 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     <label for="delete_id">Informe o ID da pergunta para excluir (tanto múltipla escolha quanto texto):</label><br>
     <input type="text" id="delete_id" name="delete_id" required><br><br>
     <button type="submit">Excluir Pergunta</button>
+
+
+
 </form>
+
+<a href="menu.php">
+    <button>Voltar ao Menu</button>
+</a>

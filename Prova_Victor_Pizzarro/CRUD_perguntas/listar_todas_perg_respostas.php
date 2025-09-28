@@ -9,7 +9,7 @@ if (file_exists($mc_file)) {
         echo "<h1>Perguntas de Múltipla Escolha</h1><ul>";
 
         foreach ($mc_questions as $line) {
-            $data = explode('|', $line, 4);
+            $data = explode(';', $line, 4);
             if (count($data) !== 4) {
                 echo "<li><i>Pergunta inválida: formato incorreto.</i></li>";
                 continue;
@@ -55,7 +55,7 @@ if (file_exists($text_file)) {
         echo "<h1>Perguntas de Texto</h1><ul>";
 
         foreach ($text_questions as $line) {
-            $data = explode('|', $line, 3);
+            $data = explode(';', $line, 3);
             if (count($data) !== 3) {
                 echo "<li><i>Pergunta de texto inválida: formato incorreto.</i></li>";
                 continue;
@@ -75,3 +75,8 @@ if (file_exists($text_file)) {
     echo "<p>Arquivo de perguntas de texto não encontrado!</p>";
 }
 ?>
+
+<a href="menu.php">
+  <button>Voltar ao Menu</button>
+</a>
+

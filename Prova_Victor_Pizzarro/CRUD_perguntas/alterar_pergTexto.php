@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $new_question = trim($_POST['text_question']);
     $new_answer = trim($_POST['correct_answer']);
 
-   
+
     if ($question_id <= 0 || $new_question === '' || $new_answer === '') {
         echo "Por favor, preencha corretamente o ID, a pergunta e a resposta correta.";
         exit;
@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $found = false;
 
     foreach ($text_questions as $key => $line) {
-        $data = explode('|', $line, 3);
+        $data = explode(';', $line, 3);
         if (count($data) !== 3) continue;
 
         $id = intval($data[0]);
         if ($id === $question_id) {
-            
-            $text_questions[$key] = $id . '|' . $new_question . '|' . $new_answer;
+
+            $text_questions[$key] = $id . ';' . $new_question . ';' . $new_answer;
             $found = true;
             break;
         }
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         exit;
     }
 
-   
+
     file_put_contents($file_path, implode("\n", $text_questions) . "\n");
     echo "Pergunta de texto editada com sucesso!";
 }
@@ -58,4 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     <input type="text" name="correct_answer" required><br><br>
 
     <button type="submit">Editar Pergunta</button>
+
+
+
 </form>
+
+<a href="menu.php">
+    <button>Voltar ao Menu</button>
+</a>

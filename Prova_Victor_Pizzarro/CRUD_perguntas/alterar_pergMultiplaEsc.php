@@ -5,10 +5,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $question_id = intval($_POST['question_id']);
     $new_question = trim($_POST['question']);
     $choices = array_map('trim', $_POST['choices']);
-    $choices = array_filter($choices); 
+    $choices = array_filter($choices);
     $correct_index = isset($_POST['correct_index']) ? intval($_POST['correct_index']) : -1;
 
-    
+
     if (empty($new_question) || count($choices) != 5 || $correct_index < 0 || $correct_index > 4) {
         echo "Por favor, preencha corretamente a pergunta, as 5 alternativas e selecione a resposta correta.";
         exit;
@@ -23,13 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $found = false;
 
     foreach ($mc_questions as $key => $line) {
-        $data = explode('|', $line, 4);
+        $data = explode(';', $line, 4);
         if (count($data) !== 4) continue;
 
         $id = intval($data[0]);
         if ($id === $question_id) {
-           
-            $mc_questions[$key] = $id . '|' . $new_question . '|' . implode(',', $choices) . '|' . $correct_index;
+
+            $mc_questions[$key] = $id . ';' . $new_question . ';' . implode(',', $choices) . ';' . $correct_index;
             $found = true;
             break;
         }
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         exit;
     }
 
-    
+
     file_put_contents($file_path, implode("\n", $mc_questions) . "\n");
     echo "Pergunta de múltipla escolha editada com sucesso!";
 }
@@ -82,4 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     </select><br><br>
 
     <button type="submit">Editar Pergunta</button>
+
+
+
 </form>
+
+<a href="menu.php">
+    <button>Voltar ao Menu</button>
+</a>
