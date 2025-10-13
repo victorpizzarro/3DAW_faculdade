@@ -1,0 +1,6 @@
+1;Onde nasceu o Messi?;Brasil,Argentina,Portugal,França,Angola;1
+2;Qual é o melhor jogador da Historia?;Ronaldo,Cristiano Ronaldo,Maradona,Messi,Pelé;3
+3;Qual é a capital da França?;Berlim,Paris,Moscow,Londres,Madri;1
+4;Onde se localiza o Santiago Bernabeu?;Berlim,Paris,Moscow,Londres,Madri;4
+5;Qual é o time que ganhou a Libertadores em 2019?;Fluminense,Vasco,Bahia,Flamengo,Palmeiras;3
+6;Onde nasceu Neymar?;Brasil,Andorra,Chile,Paraguai,Venezuela;0
