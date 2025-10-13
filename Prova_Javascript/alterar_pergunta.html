@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Alterar Pergunta</title>
+</head>
+<body>
+
+<h1>Alterar Pergunta</h1>
+
+<div id="container_busca">
+  <form onsubmit="event.preventDefault(); buscarPergunta();">
+    <label for="codigo_pergunta">Código da Pergunta:</label>
+    <input type="number" id="codigo_pergunta" required />
+    <button type="submit">Buscar Pergunta</button>
+  </form>
+</div>
+
+<div id="container_edicao" style="display: none;">
+  <form onsubmit="event.preventDefault(); salvarAlteracao();">
+    <input type="hidden" id="codigo_pergunta_edicao" />
+
+    <label>Pergunta: </label><br />
+    <input type="text" id="texto_pergunta_edicao" required /><br /><br />
+
+    <div id="container_alternativas"></div>
+
+    <button type="submit">Salvar Alteração</button>
+  </form>
+</div>
+
+<p id="mensagem" style="color: red;"></p>
+
+<br />
+<a href="menu.html"><button>Voltar ao Menu</button></a>
+
+<script>
+  function buscarPergunta() {
+    const codigo = document.getElementById("codigo_pergunta").value.trim();
+    const divMensagem = document.getElementById("mensagem");
+    divMensagem.innerHTML = "";
+
+    if (!codigo) {
+      divMensagem.innerText = "Por favor, informe um código.";
+      return;
+    }
+
+    const requisicao = new XMLHttpRequest();
+    requisicao.open(
+      "GET",
+      `gerenciar_pergunta.php?action=buscar&id=${encodeURIComponent(codigo)}`,
+      true
+    );
+
+    requisicao.onreadystatechange = function () {
+      if (requisicao.readyState === 4) {
+        if (requisicao.status === 200) {
+          try {
+            const dados = JSON.parse(requisicao.responseText);
+
+            if (dados.sucesso) {
+              document.getElementById("codigo_pergunta_edicao").value = dados.id;
+              document.getElementById("texto_pergunta_edicao").value = dados.pergunta;
+
+              const containerAlternativas = document.getElementById(
+                "container_alternativas"
+              );
+              containerAlternativas.innerHTML = "";
+
+              for (let i = 0; i < 5; i++) {
+                const estaMarcado = i == dados.id_correto ? "checked" : "";
+                containerAlternativas.innerHTML += `
+                  <label>Alternativa ${i + 1}:</label><br>
+                  <input type="text" id="alternativa_edicao${i}" value="${dados.alternativas[i] ||
+                    ""}" required />
+                  <input type="radio" name="alternativa_correta_edicao" value="${i}" ${estaMarcado} /> Marcar como correta
+                  <br /><br />
+                `;
+              }
+
+              document.getElementById("container_edicao").style.display = "block";
+              document.getElementById("container_busca").style.display = "none";
+              divMensagem.innerText = "";
+            } else {
+              divMensagem.innerText = dados.mensagem || "Erro ao buscar a pergunta.";
+            }
+          } catch (e) {
+            divMensagem.innerText = "Erro ao interpretar resposta do servidor.";
+          }
+        } else {
+          divMensagem.innerText = `Erro na requisição: ${requisicao.status}`;
+        }
+      }
+    };
+
+    requisicao.send();
+  }
+
+  function salvarAlteracao() {
+    const codigo = document.getElementById("codigo_pergunta_edicao").value.trim();
+    const textoPergunta = document.getElementById("texto_pergunta_edicao").value.trim();
+    const alternativas = [];
+
+    for (let i = 0; i < 5; i++) {
+      alternativas.push(document.getElementById("alternativa_edicao" + i).value.trim());
+    }
+
+    let alternativaCorreta = -1;
+    const opcoesRadio = document.getElementsByName("alternativa_correta_edicao");
+    for (let i = 0; i < opcoesRadio.length; i++) {
+      if (opcoesRadio[i].checked) {
+        alternativaCorreta = opcoesRadio[i].value;
+        break;
+      }
+    }
+
+    const divMensagem = document.getElementById("mensagem");
+    divMensagem.innerHTML = "";
+
+    if (!textoPergunta || alternativas.some((alt) => alt === "") || alternativaCorreta == -1) {
+      divMensagem.innerHTML = "Preencha todos os campos e selecione a resposta correta.";
+      return;
+    }
+
+    let url = `gerenciar_pergunta.php?action=salvar&id=${encodeURIComponent(codigo)}` +
+      `&pergunta=${encodeURIComponent(textoPergunta)}` +
+      `&escolha_certa=${encodeURIComponent(alternativaCorreta)}`;
+
+    for (let i = 0; i < 5; i++) {
+      url += `&escolha[]=${encodeURIComponent(alternativas[i])}`;
+    }
+
+    const requisicao = new XMLHttpRequest();
+    requisicao.open("GET", url, true);
+    requisicao.onreadystatechange = function () {
+      if (requisicao.readyState === 4) {
+        if (requisicao.status === 200) {
+          try {
+            const resposta = JSON.parse(requisicao.responseText);
+            if (resposta.sucesso) {
+              divMensagem.style.color = "green";
+              divMensagem.innerHTML = resposta.mensagem || "Alteração salva com sucesso!";
+
+              // Resetar interface para buscar outra pergunta
+              document.getElementById("container_edicao").style.display = "none";
+              document.getElementById("container_busca").style.display = "block";
+              document.getElementById("codigo_pergunta").value = "";
+            } else {
+              divMensagem.style.color = "red";
+              divMensagem.innerHTML = resposta.mensagem || "Erro ao salvar alteração.";
+            }
+          } catch (e) {
+            divMensagem.style.color = "red";
+            divMensagem.innerHTML = "Erro ao interpretar resposta do servidor.";
+          }
+        } else {
+          divMensagem.style.color = "red";
+          divMensagem.innerHTML = `Erro na requisição: ${requisicao.status}`;
+        }
+      }
+    };
+    requisicao.send();
+  }
+</script>
+
+</body>
+</html>
