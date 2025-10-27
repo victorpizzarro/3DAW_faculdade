@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Criar Pergunta</title>
+  <script>
+    function enviarPergunta() {
+      let pergunta = document.getElementById("pergunta").value.trim();
+      let escolha = [];
+
+      for (let i = 0; i < 5; i++) {
+        let valor = document.getElementById("escolha" + i).value.trim();
+        escolha.push(valor);
+      }
+
+      let escolha_certa = -1;
+      let radios = document.getElementsByName("escolha_certa");
+      for (let i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+          escolha_certa = radios[i].value;
+          break;
+        }
+      }
+
+      if (!pergunta || escolha.some(e => e === "") || escolha_certa == -1) {
+        document.getElementById("msg").innerHTML = "Preencha todos os campos e selecione a resposta correta.";
+        return;
+      }
+
+      // Criar formData para POST
+      let formData = new FormData();
+      formData.append("action", "create_mc");
+      formData.append("pergunta", pergunta);
+      formData.append("escolha_certa", escolha_certa);
+      for (let i = 0; i < 5; i++) {
+        formData.append("escolha[]", escolha[i]);
+      }
+
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "cadastrar_multiplaEscDB.php", true);
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            document.getElementById("msg").innerHTML = xhr.responseText;
+          } else {
+            document.getElementById("msg").innerHTML = "Erro ao enviar a pergunta.";
+          }
+        }
+      };
+
+      xhr.send(formData);
+    }
+  </script>
+</head>
+<body>
+<h1>Criar Pergunta de Múltipla Escolha</h1>
+
+<label>Pergunta: </label><br>
+<input type="text" id="pergunta" required><br><br>
+
+<div>
+  <script>
+    for (let i = 0; i < 5; i++) {
+      document.write(`<label>Alternativa ${i + 1}:</label><br>`);
+      document.write(`<input type="text" id="escolha${i}" required>`);
+      document.write(` <input type="radio" name="escolha_certa" value="${i +1}"> Marcar como correta<br><br>`);
+    }
+  </script>
+</div>
+
+<button onclick="enviarPergunta()">Criar Pergunta</button>
+<p id="msg"></p>
+
+<br>
+<a href="menu.html"><button>Voltar ao Menu</button></a>
+</body>
+</html>
