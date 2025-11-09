@@ -26,7 +26,11 @@ if ($action === 'create_mc') {
 
     // Validação básica
     if (empty($pergunta) || count($escolhas) != 5 || $escolha_certa < 0 || $escolha_certa > 4) {
+<<<<<<< HEAD
         echo "⚠️ Preencha todos os campos corretamente e selecione a resposta correta.";
+=======
+        echo "Preencha todos os campos corretamente e selecione a resposta correta.";
+>>>>>>> 421a771 (Atualização PHP com Banco de Dados)
         exit;
     }
 
@@ -47,6 +51,7 @@ if ($action === 'create_mc') {
 
     // Executa a query
     if ($conn->query($sql) === TRUE) {
+<<<<<<< HEAD
         echo "✅ Pergunta cadastrada com sucesso! ID: " . $conn->insert_id;
     } else {
         echo "❌ Erro ao cadastrar: " . $conn->error;
@@ -54,6 +59,15 @@ if ($action === 'create_mc') {
 
 } else {
     echo "⚠️ Ação inválida ou parâmetros ausentes.";
+=======
+        echo "Pergunta cadastrada com sucesso! ID: " . $conn->insert_id;
+    } else {
+        echo "Erro ao cadastrar: " . $conn->error;
+    }
+
+} else {
+    echo "Ação inválida ou parâmetros ausentes.";
+>>>>>>> 421a771 (Atualização PHP com Banco de Dados)
 }
 
 $conn->close();

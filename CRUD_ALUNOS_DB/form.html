@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Alunos</title>
+</head>
+<body>
+
+    <h1>CRUD Alunos</h1>
+
+    <form id="formAluno">
+        <input type="hidden" id="id" name="id">
+
+        <label>Nome:</label><br>
+        <input type="text" id="nome" name="nome" placeholder="Insira seu nome" required><br>
+
+        <label>Matrícula:</label><br>
+        <input type="number" id="matricula" name="matricula" placeholder="Insira sua matrícula" required><br>
+
+        <label>Email:</label><br>
+        <input type="email" id="email" name="email" placeholder="Insira seu email" required><br><br>
+
+        <button type="submit">Enviar</button>
+        <button type="button" id="btnBuscar">Buscar por Nome</button>
+        <button type="button" id="btnListarTodos">Listar Todos</button>
+    </form>
+
+    <p id="msg"></p>
+
+    <h2>Lista de Alunos</h2>
+    <div id="lista"></div>
+
+    <script src="func.js"></script>
+</body>
+</html>
